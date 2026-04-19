@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --app-bg: #0f172a;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(12px);
+}
+
+body {
+  @apply bg-slate-950 text-slate-200 antialiased selection:bg-primary-500/30 selection:text-primary-200;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(210, 100%, 15%, 0.15) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(230, 100%, 15%, 0.15) 0, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(250, 100%, 15%, 0.15) 0, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(270, 100%, 15%, 0.15) 0, transparent 50%);
+  min-height: 100-vh;
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-card {
+  @apply glass rounded-2xl transition-all duration-300;
+}
+
+.glass-card:hover {
+  @apply border-white/20 shadow-2xl shadow-primary-500/10;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-950;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-800 rounded-full hover:bg-slate-700 transition-colors;
+}
+
+/* ATS Resume Styles (Pure CSS for PDF consistency) */
+.ats-resume {
+  background: white;
+  color: #1a1a1a;
+  font-family: sans-serif;
+}
+
+.ats-section-title {
+  border-bottom: 2px solid #333;
+  margin-bottom: 1rem;
+  padding-bottom: 0.25rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+}

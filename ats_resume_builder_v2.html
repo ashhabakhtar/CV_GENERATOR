@@ -1,0 +1,1163 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--green:#1D9E75;--green-light:#E1F5EE;--green-dark:#0F6E56;--green-mid:#5DCAA5;--amber:#EF9F27;--amber-light:#FAEEDA;--red:#E24B4A;--red-light:#FCEBEB;--blue:#378ADD;--blue-light:#E6F1FB;--trans:all 0.18s cubic-bezier(.4,0,.2,1)}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:13px}
+.app{display:flex;height:820px;background:var(--color-background-tertiary);overflow:hidden;border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary)}
+
+.sidebar{width:210px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.sb-top{padding:14px 14px 10px}
+.logo{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.logo-icon{width:22px;height:22px;background:var(--green);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:12px;height:12px;fill:white}
+.logo-text{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.logo-ver{font-size:10px;background:var(--green-light);color:var(--green-dark);padding:2px 6px;border-radius:4px;font-weight:500}
+
+.score-ring-wrap{padding:12px 14px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.score-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.score-label-text{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em}
+.score-val{font-size:18px;font-weight:500;color:var(--green)}
+.score-bar-bg{height:5px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden}
+.score-bar-fill{height:100%;background:var(--green);border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.score-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.score-tag{font-size:10px;padding:2px 7px;border-radius:20px}
+.tag-ok{background:var(--green-light);color:var(--green-dark)}
+.tag-warn{background:var(--amber-light);color:#633806}
+.tag-bad{background:var(--red-light);color:#791F1F}
+
+.nav{flex:1;overflow-y:auto;padding:10px 8px}
+.nav-section-label{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;padding:6px 8px 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:var(--border-radius-md);cursor:pointer;font-size:12px;color:var(--color-text-secondary);transition:var(--trans);margin-bottom:1px;user-select:none}
+.nav-item:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.nav-item.active{background:var(--green-light);color:var(--green-dark);font-weight:500}
+.nav-ico{width:15px;height:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-badge{margin-left:auto;font-size:10px;background:var(--color-background-secondary);color:var(--color-text-tertiary);padding:1px 5px;border-radius:10px}
+.nav-badge.new{background:var(--green-light);color:var(--green-dark)}
+
+.ver-list{padding:8px;border-top:0.5px solid var(--color-border-tertiary)}
+.ver-item{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;border-radius:var(--border-radius-md);cursor:pointer;transition:var(--trans)}
+.ver-item:hover{background:var(--color-background-secondary)}
+.ver-name{font-size:11px;color:var(--color-text-secondary)}
+.ver-date{font-size:10px;color:var(--color-text-tertiary)}
+.ver-active .ver-name{color:var(--green-dark);font-weight:500}
+.ver-dot{width:6px;height:6px;border-radius:50%;background:var(--color-border-tertiary);flex-shrink:0}
+.ver-active .ver-dot{background:var(--green)}
+.add-ver{display:flex;align-items:center;gap:6px;padding:6px 8px;font-size:11px;color:var(--color-text-tertiary);cursor:pointer;border-radius:var(--border-radius-md);transition:var(--trans)}
+.add-ver:hover{color:var(--green);background:var(--green-light)}
+
+.main-area{flex:1;display:flex;overflow:hidden;min-width:0}
+
+.editor{flex:1;overflow-y:auto;min-width:0}
+.editor-inner{padding:16px;display:flex;flex-direction:column;gap:10px}
+.editor-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.editor-title{font-size:13px;font-weight:500}
+.topbar-actions{display:flex;gap:6px;align-items:center}
+
+.btn{font-size:11px;padding:5px 11px;border-radius:var(--border-radius-md);cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);transition:var(--trans);font-family:var(--font-sans);display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn:hover{background:var(--color-background-secondary)}
+.btn:active{transform:scale(.98)}
+.btn-green{background:var(--green);color:white;border-color:var(--green)}
+.btn-green:hover{background:var(--green-dark)}
+.btn-outline-green{border-color:var(--green-mid);color:var(--green-dark)}
+.btn-outline-green:hover{background:var(--green-light)}
+
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;transition:var(--trans)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;user-select:none}
+.card-head:hover{background:var(--color-background-secondary)}
+.card-head-left{display:flex;align-items:center;gap:9px}
+.card-ico{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ico-person{background:#E6F1FB;color:#0C447C}
+.ico-work{background:var(--green-light);color:var(--green-dark)}
+.ico-edu{background:#FAEEDA;color:#633806}
+.ico-skill{background:#EEEDFE;color:#3C3489}
+.ico-proj{background:#FBEAF0;color:#72243E}
+.ico-cert{background:#EAF3DE;color:#27500A}
+.ico-lang{background:#FAECE7;color:#712B13}
+.ico-ai{background:var(--green-light);color:var(--green-dark)}
+.card-head-title{font-size:12px;font-weight:500}
+.card-head-sub{font-size:10px;color:var(--color-text-tertiary)}
+.card-chevron{font-size:11px;color:var(--color-text-tertiary);transition:transform .2s}
+.card-chevron.open{transform:rotate(90deg)}
+.card-body{display:none;padding:0 14px 14px;border-top:0.5px solid var(--color-border-tertiary)}
+.card-body.open{display:block}
+
+.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.field-grid.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.field-grid.g1{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:3px}
+.field label{font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em}
+.field input,.field textarea,.field select{font-size:12px;padding:6px 9px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);outline:none;transition:border-color .15s;resize:none;width:100%}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--green)}
+.field textarea{line-height:1.5;min-height:64px}
+.char-count{font-size:10px;color:var(--color-text-tertiary);text-align:right;margin-top:2px}
+
+.entry-wrap{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.entry-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+.entry-hd{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;cursor:pointer}
+.entry-hd:hover{background:var(--color-background-tertiary)}
+.entry-hd-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.entry-hd-sub{font-size:10px;color:var(--color-text-secondary)}
+.entry-hd-right{display:flex;gap:6px;align-items:center}
+.entry-del{font-size:10px;color:var(--color-text-tertiary);padding:3px 7px;border-radius:4px;cursor:pointer;transition:var(--trans)}
+.entry-del:hover{background:var(--red-light);color:#791F1F}
+.entry-body{display:none;padding:10px 12px;border-top:0.5px solid var(--color-border-tertiary)}
+.entry-body.open{display:block}
+
+.bullet-list{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+.bullet-row{display:flex;align-items:flex-start;gap:6px}
+.bullet-dot{margin-top:9px;width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
+.bullet-row input{flex:1;font-size:12px;padding:5px 8px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);outline:none}
+.bullet-row input:focus{border-color:var(--green)}
+.bullet-rm{width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:4px;cursor:pointer;color:var(--color-text-tertiary);font-size:13px;margin-top:4px;flex-shrink:0;transition:var(--trans)}
+.bullet-rm:hover{background:var(--red-light);color:#A32D2D}
+.add-bullet{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);cursor:pointer;margin-top:6px;padding:3px 0}
+.add-bullet:hover{color:var(--green-dark)}
+
+.add-entry-btn{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green);cursor:pointer;padding:8px 0 0;transition:var(--trans)}
+.add-entry-btn:hover{color:var(--green-dark)}
+
+.skills-wrap{margin-top:12px}
+.skill-tags{display:flex;flex-wrap:wrap;gap:5px;min-height:28px}
+.skill-pill{display:inline-flex;align-items:center;gap:4px;background:var(--green-light);color:var(--green-dark);font-size:11px;padding:4px 10px;border-radius:20px;cursor:default;animation:popIn .2s ease}
+@keyframes popIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.skill-x{cursor:pointer;opacity:.6;font-size:12px;line-height:1}
+.skill-x:hover{opacity:1}
+.skill-row{display:flex;gap:6px;margin-top:8px}
+.skill-row input{flex:1;font-size:12px;padding:6px 9px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);outline:none}
+.skill-row input:focus{border-color:var(--green)}
+.skill-suggest{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.suggest-chip{font-size:11px;padding:3px 8px;border-radius:20px;cursor:pointer;background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary);transition:var(--trans)}
+.suggest-chip:hover{background:var(--green-light);color:var(--green-dark);border-color:var(--green-mid)}
+
+.lang-grid{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.lang-row{display:flex;gap:6px;align-items:center}
+.lang-row input{flex:1;font-size:12px;padding:6px 9px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);outline:none}
+.lang-row select{font-size:11px;padding:5px 7px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);outline:none}
+.lang-del{font-size:13px;color:var(--color-text-tertiary);cursor:pointer;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:var(--trans)}
+.lang-del:hover{background:var(--red-light);color:#A32D2D}
+
+.ai-actions{display:flex;flex-direction:column;gap:6px;padding-top:10px}
+.ai-action-btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);cursor:pointer;background:var(--color-background-primary);transition:var(--trans);text-align:left}
+.ai-action-btn:hover{border-color:var(--green-mid);background:var(--green-light)}
+.ai-action-icon{width:24px;height:24px;border-radius:5px;background:var(--green-light);color:var(--green-dark);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ai-action-text{flex:1}
+.ai-action-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.ai-action-sub{font-size:10px;color:var(--color-text-secondary);margin-top:1px}
+.ai-arrow{font-size:11px;color:var(--color-text-tertiary)}
+
+.right-panel{width:320px;background:var(--color-background-primary);border-left:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+.right-tabs{display:flex;border-bottom:0.5px solid var(--color-border-tertiary)}
+.right-tab{flex:1;padding:10px 4px;text-align:center;font-size:11px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;transition:var(--trans);user-select:none}
+.right-tab:hover{color:var(--color-text-primary)}
+.right-tab.active{color:var(--green-dark);border-bottom-color:var(--green);font-weight:500}
+.right-content{flex:1;overflow-y:auto}
+
+.preview-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.preview-bar-label{font-size:10px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em}
+.tmpl-btns{display:flex;gap:3px}
+.tmpl-btn{font-size:10px;padding:3px 8px;border-radius:4px;cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:var(--trans);border:0.5px solid transparent}
+.tmpl-btn:hover{background:var(--color-background-secondary)}
+.tmpl-btn.active{background:var(--green-light);color:var(--green-dark);border-color:var(--green-mid)}
+.resume-paper{padding:18px;font-size:10px;line-height:1.55;color:var(--color-text-primary)}
+.rp-name{font-size:17px;font-weight:500;margin-bottom:2px}
+.rp-title{font-size:11px;color:var(--green-dark);font-weight:500;margin-bottom:3px}
+.rp-contact{font-size:9.5px;color:var(--color-text-secondary);margin-bottom:12px;display:flex;flex-wrap:wrap;gap:5px}
+.rp-contact span{display:flex;align-items:center;gap:3px}
+.rp-sec{margin-bottom:12px}
+.rp-sec-title{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-secondary);padding-bottom:4px;margin-bottom:7px}
+.rp-sec-line{height:0.5px;background:var(--color-border-tertiary);margin-bottom:7px;margin-top:-5px}
+.rp-entry{margin-bottom:8px}
+.rp-entry-hd{display:flex;justify-content:space-between;align-items:baseline}
+.rp-entry-title{font-size:11px;font-weight:500}
+.rp-entry-date{font-size:9.5px;color:var(--color-text-secondary)}
+.rp-entry-co{font-size:10px;color:var(--color-text-secondary);margin-bottom:3px}
+.rp-bullet{display:flex;gap:5px;font-size:10px;color:var(--color-text-secondary);margin-bottom:2px}
+.rp-bullet:before{content:"•";flex-shrink:0;color:var(--green)}
+.rp-skills{display:flex;flex-wrap:wrap;gap:3px}
+.rp-skill{font-size:9.5px;padding:2px 6px;background:var(--color-background-secondary);border-radius:3px;color:var(--color-text-secondary)}
+.rp-skill.modern{background:var(--green-light);color:var(--green-dark);border-radius:10px}
+.rp-summary{font-size:10px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:12px}
+.rp-proj{margin-bottom:6px}
+.rp-proj-title{font-size:10.5px;font-weight:500}
+.rp-proj-tech{font-size:9px;color:var(--green-dark);margin-bottom:2px}
+.rp-cert{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.rp-lang-bar{height:3px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden;margin-top:2px;margin-bottom:6px}
+.rp-lang-fill{height:100%;background:var(--green);border-radius:2px}
+
+.ats-section{padding:12px 14px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ats-sec-title{font-size:10px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px}
+.ats-row{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--color-text-secondary);margin-bottom:5px}
+.ats-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-g{background:var(--green)}
+.dot-a{background:var(--amber)}
+.dot-r{background:var(--red)}
+.ats-text{flex:1}
+.ats-badge{font-size:9px;padding:1px 5px;border-radius:3px}
+.ats-badge-ok{background:var(--green-light);color:var(--green-dark)}
+.ats-badge-warn{background:var(--amber-light);color:#633806}
+.ats-badge-bad{background:var(--red-light);color:#791F1F}
+
+.jd-section{padding:12px 14px}
+.jd-sec-title{font-size:10px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+.jd-section textarea{width:100%;font-size:11px;padding:8px 10px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);outline:none;resize:none;min-height:90px;line-height:1.5}
+.jd-section textarea:focus{border-color:var(--green)}
+.kw-area{margin-top:8px}
+.kw-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.kw-match-score{font-size:11px;font-weight:500;color:var(--green-dark)}
+.kw-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.kw-chip{font-size:10px;padding:2px 8px;border-radius:20px}
+.kw-found{background:var(--green-light);color:var(--green-dark)}
+.kw-missing{background:var(--red-light);color:#791F1F}
+.kw-bar{height:4px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden;margin-top:7px}
+.kw-bar-fill{height:100%;border-radius:2px;transition:width .5s ease;background:var(--green)}
+
+.cover-editor{padding:14px;display:flex;flex-direction:column;gap:10px}
+.cover-editor textarea{width:100%;font-size:12px;padding:10px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);outline:none;resize:none;min-height:320px;line-height:1.7}
+.cover-editor textarea:focus{border-color:var(--green)}
+.cover-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cover-meta input{font-size:12px;padding:6px 9px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);outline:none;width:100%}
+.cover-meta input:focus{border-color:var(--green)}
+
+.tips-section{padding:14px;display:flex;flex-direction:column;gap:8px}
+.tip-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;border-left:3px solid var(--green)}
+.tip-title{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.tip-text{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+.tip-warn{border-left-color:var(--amber)}
+.tip-bad{border-left-color:var(--red)}
+
+.progress-section{padding:12px 14px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.progress-title{font-size:10px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px}
+.progress-item{margin-bottom:8px}
+.progress-row{display:flex;justify-content:space-between;margin-bottom:3px}
+.progress-name{font-size:11px;color:var(--color-text-secondary)}
+.progress-pct{font-size:10px;color:var(--color-text-tertiary)}
+.progress-bar{height:4px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.pf-green{background:var(--green)}
+.pf-amber{background:var(--amber)}
+.pf-red{background:var(--red)}
+
+.toast{position:absolute;bottom:16px;right:16px;background:var(--color-text-primary);color:var(--color-background-primary);font-size:12px;padding:8px 14px;border-radius:var(--border-radius-md);opacity:0;transform:translateY(8px);transition:all .25s ease;pointer-events:none;z-index:100}
+.toast.show{opacity:1;transform:translateY(0)}
+</style>
+
+<h2 class="sr-only">Full-featured AI-powered ATS resume builder with live preview, cover letter generator, keyword analyzer, and scoring</h2>
+
+<div class="app" style="position:relative">
+
+<div class="sidebar">
+  <div class="sb-top">
+    <div class="logo">
+      <div class="logo-icon"><svg viewBox="0 0 12 12"><path d="M2 9l3-6 2 4 1.5-2L11 9z"/></svg></div>
+      <span class="logo-text">ResumeAI</span>
+      <span class="logo-ver">Pro</span>
+    </div>
+  </div>
+
+  <div class="score-ring-wrap">
+    <div class="score-label-row">
+      <span class="score-label-text">ATS score</span>
+      <span class="score-val" id="scoreVal">72</span>
+    </div>
+    <div class="score-bar-bg"><div class="score-bar-fill" id="scoreBar" style="width:72%"></div></div>
+    <div class="score-tags" id="scoreTags"></div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-section-label">Sections</div>
+    <div class="nav-item active" data-section="personal" onclick="navTo(this,'personal')">
+      <div class="nav-ico">&#9632;</div> Personal info
+    </div>
+    <div class="nav-item" data-section="experience" onclick="navTo(this,'experience')">
+      <div class="nav-ico">&#9650;</div> Experience <span class="nav-badge" id="nbExp">2</span>
+    </div>
+    <div class="nav-item" data-section="education" onclick="navTo(this,'education')">
+      <div class="nav-ico">&#9670;</div> Education <span class="nav-badge" id="nbEdu">1</span>
+    </div>
+    <div class="nav-item" data-section="skills" onclick="navTo(this,'skills')">
+      <div class="nav-ico">&#9679;</div> Skills <span class="nav-badge" id="nbSkill">8</span>
+    </div>
+    <div class="nav-item" data-section="projects" onclick="navTo(this,'projects')">
+      <div class="nav-ico">&#9632;</div> Projects <span class="nav-badge" id="nbProj">1</span>
+    </div>
+    <div class="nav-item" data-section="certifications" onclick="navTo(this,'certifications')">
+      <div class="nav-ico">&#9670;</div> Certifications
+    </div>
+    <div class="nav-item" data-section="languages" onclick="navTo(this,'languages')">
+      <div class="nav-ico">&#9650;</div> Languages
+    </div>
+    <div class="nav-item" data-section="aitools" onclick="navTo(this,'aitools')">
+      <div class="nav-ico">&#9733;</div> AI tools <span class="nav-badge new">NEW</span>
+    </div>
+
+    <div class="nav-section-label" style="margin-top:8px">Versions</div>
+    <div class="ver-item ver-active" onclick="showToast('Switched to Resume v1')">
+      <div style="display:flex;align-items:center;gap:6px"><div class="ver-dot"></div><span class="ver-name">Resume v1</span></div>
+      <span class="ver-date">Today</span>
+    </div>
+    <div class="ver-item" onclick="showToast('Switched to Amazon resume')">
+      <div style="display:flex;align-items:center;gap:6px"><div class="ver-dot"></div><span class="ver-name">Amazon SDE</span></div>
+      <span class="ver-date">Apr 12</span>
+    </div>
+    <div class="ver-item" onclick="showToast('Switched to Google resume')">
+      <div style="display:flex;align-items:center;gap:6px"><div class="ver-dot"></div><span class="ver-name">Google L4</span></div>
+      <span class="ver-date">Apr 8</span>
+    </div>
+    <div class="add-ver" onclick="showToast('New version created!')">+ New version</div>
+  </div>
+</div>
+
+<div class="main-area">
+  <div class="editor">
+    <div class="editor-inner">
+      <div class="editor-topbar">
+        <div class="editor-title">Resume editor</div>
+        <div class="topbar-actions">
+          <button class="btn btn-outline-green" onclick="sendPrompt('Analyze my resume and give me 5 specific improvements to increase my ATS score and hiring chances')">AI review &#8599;</button>
+          <button class="btn btn-green" onclick="sendPrompt('My resume is ready. Generate a clean ATS-optimized PDF version and provide DOCX export instructions. Here is all the resume data.')">Export PDF &#8599;</button>
+        </div>
+      </div>
+
+      <!-- Personal Info -->
+      <div class="card" id="section-personal">
+        <div class="card-head" onclick="toggleCard(this)">
+          <div class="card-head-left">
+            <div class="card-ico ico-person">&#9632;</div>
+            <div><div class="card-head-title">Personal info</div><div class="card-head-sub">Contact & summary</div></div>
+          </div>
+          <div class="card-chevron open">&#9654;</div>
+        </div>
+        <div class="card-body open">
+          <div class="field-grid">
+            <div class="field"><label>Full name</label><input id="f_name" value="Arjun Sharma" oninput="updateAll()"></div>
+            <div class="field"><label>Job title</label><input id="f_title" value="Software Engineer" oninput="updateAll()"></div>
+            <div class="field"><label>Email</label><input id="f_email" value="arjun.sharma@email.com" oninput="updateAll()"></div>
+            <div class="field"><label>Phone</label><input id="f_phone" value="+91 98765 43210" oninput="updateAll()"></div>
+            <div class="field"><label>Location</label><input id="f_loc" value="Bangalore, India" oninput="updateAll()"></div>
+            <div class="field"><label>LinkedIn</label><input id="f_linkedin" value="linkedin.com/in/arjunsharma" oninput="updateAll()"></div>
+            <div class="field"><label>GitHub</label><input id="f_github" value="github.com/arjunsharma" oninput="updateAll()"></div>
+            <div class="field"><label>Portfolio</label><input id="f_portfolio" value="" placeholder="yoursite.com" oninput="updateAll()"></div>
+          </div>
+          <div class="field-grid g1" style="margin-top:8px">
+            <div class="field">
+              <label>Professional summary</label>
+              <textarea id="f_summary" rows="3" oninput="updateAll();updateCharCount(this,'sc')">Results-driven software engineer with 4+ years of experience building scalable backend systems and APIs. Proficient in Java, Python, and cloud technologies. Proven track record of delivering high-impact features in agile environments and improving system performance by 30%+.</textarea>
+              <div class="char-count" id="sc"><span id="sc_n">0</span> / 400 chars</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div class="card" id="section-experience">
+        <div class="card-head" onclick="toggleCard(this)">
+          <div class="card-head-left">
+            <div class="card-ico ico-work">&#9650;</div>
+            <div><div class="card-head-title">Work experience</div><div class="card-head-sub" id="expCount">2 positions</div></div>
+          </div>
+          <div class="card-chevron open">&#9654;</div>
+        </div>
+        <div class="card-body open">
+          <div class="entry-wrap" id="expWrap"></div>
+          <div class="add-entry-btn" onclick="addExp()">+ Add position</div>
+        </div>
+      </div>
+
+      <!-- Education -->
+      <div class="card" id="section-education">
+        <div class="card-head" onclick="toggleCard(this)">
+          <div class="card-head-left">
+            <div class="card-ico ico-edu">&#9670;</div>
+            <div><div class="card-head-title">Education</div><div class="card-head-sub" id="eduCount">1 degree</div></div>
+          </div>
+          <div class="card-chevron">&#9654;</div>
+        </div>
+        <div class="card-body" id="eduBody">
+          <div class="entry-wrap" id="eduWrap"></div>
+          <div class="add-entry-btn" onclick="addEdu()">+ Add education</div>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="card" id="section-skills">
+        <div class="card-head" onclick="toggleCard(this)">
+          <div class="card-head-left">
+            <div class="card-ico ico-skill">&#9679;</div>
+            <div><div class="card-head-title">Skills</div><div class="card-head-sub">ATS-critical keywords</div></div>
+          </div>
+          <div class="card-chevron">&#9654;</div>
+        </div>
+        <div class="card-body" id="skillsBody">
+          <div class="skills-wrap">
+            <div class="skill-tags" id="skillTags"></div>
+            <div class="skill-row">
+              <input id="skillIn" placeholder="Type a skill and press Enter..." onkeydown="if(event.key==='Enter')addSkill()">
+              <button class="btn" onclick="addSkill()">Add</button>
+            </div>
+            <div class="skill-suggest" id="skillSuggest"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projects -->
+      <div class="card" id="section-projects">
+        <div class="card-head" onclick="toggleCard(this)">
+          <div class="card-head-left">
+            <div class="card-ico ico-proj">&#9632;</div>
+            <div><div class="card-head-title">Projects</div><div class="card-head-sub" id="projCount">1 project</div></div>
+          </div>
+          <div class="card-chevron">&#9654;</div>
+        </div>
+        <div class="card-body" id="projBody">
+          <div class="entry-wrap" id="projWrap"></div>
+          <div class="add-entry-btn" onclick="addProj()">+ Add project</div>
+        </div>
+      </div>
+
+      <!-- Certifications -->
+      <div class="card" id="section-certifications">
+        <div class="card-head" onclick="toggleCard(this)">
+          <div class="card-head-left">
+            <div class="card-ico ico-cert">&#9670;</div>
+            <div><div class="card-head-title">Certifications</div><div class="card-head-sub">Licenses & awards</div></div>
+          </div>
+          <div class="card-chevron">&#9654;</div>
+        </div>
+        <div class="card-body" id="certBody">
+          <div class="entry-wrap" id="certWrap"></div>
+          <div class="add-entry-btn" onclick="addCert()">+ Add certification</div>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div class="card" id="section-languages">
+        <div class="card-head" onclick="toggleCard(this)">
+          <div class="card-head-left">
+            <div class="card-ico ico-lang">&#9650;</div>
+            <div><div class="card-head-title">Languages</div><div class="card-head-sub">Spoken languages</div></div>
+          </div>
+          <div class="card-chevron">&#9654;</div>
+        </div>
+        <div class="card-body" id="langBody">
+          <div class="lang-grid" id="langWrap"></div>
+          <div class="add-entry-btn" onclick="addLang()">+ Add language</div>
+        </div>
+      </div>
+
+      <!-- AI Tools -->
+      <div class="card" id="section-aitools" style="border-color:var(--green-mid)">
+        <div class="card-head" onclick="toggleCard(this)">
+          <div class="card-head-left">
+            <div class="card-ico ico-ai">&#9733;</div>
+            <div><div class="card-head-title">AI assistant</div><div class="card-head-sub">Powered by Claude</div></div>
+          </div>
+          <div class="card-chevron">&#9654;</div>
+        </div>
+        <div class="card-body">
+          <div class="ai-actions">
+            <div class="ai-action-btn" onclick="sendPrompt('Improve my resume bullet points to be more impactful. Add quantifiable metrics and strong action verbs like: Developed, Architected, Optimized, Led, Reduced, Increased. Make each bullet start with an action verb.')">
+              <div class="ai-action-icon">&#9679;</div>
+              <div class="ai-action-text"><div class="ai-action-title">Improve bullet points</div><div class="ai-action-sub">Add metrics & action verbs</div></div>
+              <div class="ai-arrow">&#8599;</div>
+            </div>
+            <div class="ai-action-btn" onclick="sendPrompt('Rewrite my professional summary to be more compelling for ATS systems. Make it 3-4 sentences, keyword-rich, and highlight my top 3 achievements.')">
+              <div class="ai-action-icon">&#9632;</div>
+              <div class="ai-action-text"><div class="ai-action-title">Rewrite summary</div><div class="ai-action-sub">Keyword-optimized 3-4 sentences</div></div>
+              <div class="ai-arrow">&#8599;</div>
+            </div>
+            <div class="ai-action-btn" onclick="sendPrompt('Suggest 15 ATS-critical technical skills for a software engineer that I should consider adding to my resume. Group them by category: Languages, Frameworks, Cloud, Tools, Methodologies.')">
+              <div class="ai-action-icon">&#9670;</div>
+              <div class="ai-action-text"><div class="ai-action-title">Suggest skills</div><div class="ai-action-sub">ATS-critical keywords by category</div></div>
+              <div class="ai-arrow">&#8599;</div>
+            </div>
+            <div class="ai-action-btn" onclick="sendPrompt('Generate a tailored cover letter for a Software Engineer position. Use the STAR method, mention specific technologies, and make it 3 paragraphs: introduction, experience highlights, closing. Make it ATS-friendly.')">
+              <div class="ai-action-icon">&#9733;</div>
+              <div class="ai-action-text"><div class="ai-action-title">Generate cover letter</div><div class="ai-action-sub">STAR-method, ATS-friendly</div></div>
+              <div class="ai-arrow">&#8599;</div>
+            </div>
+            <div class="ai-action-btn" onclick="sendPrompt('Review my resume for common ATS mistakes and give me a checklist of what to fix. Check: formatting, keywords, section headers, date formats, and content quality.')">
+              <div class="ai-action-icon">&#9650;</div>
+              <div class="ai-action-text"><div class="ai-action-title">Full ATS audit</div><div class="ai-action-sub">Check all ATS compatibility issues</div></div>
+              <div class="ai-arrow">&#8599;</div>
+            </div>
+            <div class="ai-action-btn" onclick="sendPrompt('Based on my software engineering resume, suggest 10 companies I should apply to in India. Include company name, role, estimated salary range, and why my profile is a good fit.')">
+              <div class="ai-action-icon">&#9679;</div>
+              <div class="ai-action-text"><div class="ai-action-title">Job match suggestions</div><div class="ai-action-sub">Companies that fit your profile</div></div>
+              <div class="ai-arrow">&#8599;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="right-panel">
+    <div class="right-tabs">
+      <div class="right-tab active" onclick="switchRightTab(this,'preview')">Preview</div>
+      <div class="right-tab" onclick="switchRightTab(this,'ats')">ATS check</div>
+      <div class="right-tab" onclick="switchRightTab(this,'cover')">Cover letter</div>
+      <div class="right-tab" onclick="switchRightTab(this,'tips')">Tips</div>
+    </div>
+
+    <div class="right-content">
+      <!-- Preview tab -->
+      <div id="tab-preview">
+        <div class="preview-bar">
+          <span class="preview-bar-label">Live preview</span>
+          <div class="tmpl-btns">
+            <div class="tmpl-btn active" onclick="setTemplate(this,'ats')">ATS safe</div>
+            <div class="tmpl-btn" onclick="setTemplate(this,'modern')">Modern</div>
+            <div class="tmpl-btn" onclick="setTemplate(this,'classic')">Classic</div>
+          </div>
+        </div>
+        <div class="resume-paper" id="resumePaper"></div>
+      </div>
+
+      <!-- ATS check tab -->
+      <div id="tab-ats" style="display:none">
+        <div class="progress-section">
+          <div class="progress-title">Section completeness</div>
+          <div id="progressItems"></div>
+        </div>
+        <div class="ats-section">
+          <div class="ats-sec-title">ATS compatibility</div>
+          <div id="atsRows"></div>
+        </div>
+        <div class="jd-section">
+          <div class="jd-sec-title">Job description analyzer</div>
+          <textarea id="jdInput" placeholder="Paste the job description here to analyze keyword match and get tailored suggestions..." oninput="analyzeJD()" rows="5"></textarea>
+          <div class="kw-area" id="kwArea" style="display:none">
+            <div class="kw-row">
+              <span style="font-size:11px;color:var(--color-text-secondary)">Keyword match</span>
+              <span class="kw-match-score" id="kwScore">—</span>
+            </div>
+            <div class="kw-bar"><div class="kw-bar-fill" id="kwBar" style="width:0%"></div></div>
+            <div class="kw-chips" id="kwChips"></div>
+            <div style="margin-top:10px">
+              <button class="btn btn-outline-green" style="width:100%;justify-content:center" onclick="sendPrompt('Based on the job description I analyzed, give me specific advice on how to tailor my resume to increase the keyword match score. Tell me exactly which words to add and where.')">Get tailored suggestions &#8599;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cover Letter tab -->
+      <div id="tab-cover" style="display:none">
+        <div class="cover-editor">
+          <div class="cover-meta">
+            <input id="cl_job" placeholder="Job title" oninput="updateCoverPreview()">
+            <input id="cl_company" placeholder="Company name" oninput="updateCoverPreview()">
+          </div>
+          <textarea id="coverText" placeholder="Your cover letter will appear here. Use the AI assistant to generate one, or write your own..." oninput="updateCoverPreview()" rows="18">Dear Hiring Manager,
+
+I am writing to express my strong interest in the Software Engineer position at your company. With 4+ years of experience building scalable backend systems using Java and Python, I am confident in my ability to contribute meaningfully to your engineering team from day one.
+
+During my tenure at Infosys, I led the migration of a legacy monolith to microservices architecture, resulting in a 35% improvement in API response times and significantly improved system reliability. I also mentored junior developers and collaborated closely with product and design teams in agile sprint cycles.
+
+I am particularly excited about the opportunity to work on challenging distributed systems problems. My experience with Spring Boot, cloud infrastructure, and REST API design aligns well with your technical stack.
+
+Thank you for considering my application. I look forward to discussing how my background and skills can contribute to your team.
+
+Sincerely,
+Arjun Sharma</textarea>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-outline-green" style="flex:1;justify-content:center" onclick="sendPrompt('Improve this cover letter to be more compelling, specific, and ATS-friendly. Add quantifiable achievements and make it more personalized. Keep it under 350 words.')">AI improve &#8599;</button>
+            <button class="btn btn-green" style="flex:1;justify-content:center" onclick="sendPrompt('Generate a new tailored cover letter for the position of ' + (document.getElementById('cl_job').value||'Software Engineer') + ' at ' + (document.getElementById('cl_company').value||'the company') + '. Use STAR method, be specific, ATS-friendly, 3 paragraphs.')">Regenerate &#8599;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips tab -->
+      <div id="tab-tips" style="display:none">
+        <div class="tips-section" id="tipsSection"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+var skills = ['Java','Python','Spring Boot','React.js','REST APIs','MySQL','Git','Agile/Scrum'];
+var currentTemplate = 'ats';
+var expData = [
+  {title:'Software Engineer',company:'Infosys Ltd',start:'Jan 2022',end:'Present',location:'Bangalore',bullets:['Developed RESTful APIs using Java Spring Boot, reducing response time by 35%','Led migration of legacy monolith to microservices, improving scalability by 3x','Collaborated cross-functionally in agile sprint cycles delivering 20+ features','Mentored 3 junior developers on code quality and best practices']},
+  {title:'Junior Developer',company:'Tech Startup',start:'Jun 2020',end:'Dec 2021',location:'Pune',bullets:['Built and maintained React.js frontend components for B2C platform with 50K+ users','Integrated third-party payment APIs increasing checkout conversion rate by 18%','Wrote unit and integration tests achieving 85% code coverage']}
+];
+var eduData = [
+  {degree:'B.Tech in Computer Science',inst:'IIT Bombay',start:'2016',end:'2020',gpa:'8.4 / 10',relevant:'Data Structures, Algorithms, DBMS, OS'}
+];
+var projData = [
+  {name:'CloudDeploy CLI',tech:'Python, Docker, AWS CLI, Boto3',desc:'Built an open-source CLI tool for automated cloud deployments',bullets:['Reduced deployment time by 70% compared to manual process','Published on PyPI with 500+ downloads in first month'],link:'github.com/arjunsharma/clouddeploy'}
+];
+var certData = [
+  {name:'AWS Certified Solutions Architect',issuer:'Amazon Web Services',date:'2023',expiry:'2026'}
+];
+var langData = [
+  {lang:'English',level:'Fluent'},
+  {lang:'Hindi',level:'Native'}
+];
+
+var STOP = new Set(['the','and','or','for','with','that','this','are','you','have','will','from','your','our','their','its','be','to','a','an','of','in','at','on','is','as','by','we','can','all','more','not','but','they','when','each','also','who','been','was','were','has','had','do','does','about','what','which','how','new','should','must','need','use','using','work','working','role','team','strong','good','great','looking','required','preferred','experience','years','ability','skills','knowledge','including','ensure','support','provide','help','ability']);
+
+function v(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+
+function toggleCard(head){
+  var body=head.nextElementSibling;
+  var ch=head.querySelector('.card-chevron');
+  var isOpen=body.classList.contains('open');
+  body.classList.toggle('open',!isOpen);
+  ch.classList.toggle('open',!isOpen);
+}
+
+function navTo(el,section){
+  document.querySelectorAll('.nav-item').forEach(function(i){i.classList.remove('active');});
+  el.classList.add('active');
+  var sec=document.getElementById('section-'+section);
+  if(sec){
+    sec.scrollIntoView({behavior:'smooth',block:'start'});
+    var head=sec.querySelector('.card-head');
+    var body=sec.querySelector('.card-body');
+    var ch=sec.querySelector('.card-chevron');
+    if(body&&!body.classList.contains('open')){
+      body.classList.add('open');
+      if(ch)ch.classList.add('open');
+    }
+  }
+}
+
+function switchRightTab(el,tab){
+  document.querySelectorAll('.right-tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  ['preview','ats','cover','tips'].forEach(function(t){
+    var d=document.getElementById('tab-'+t);
+    if(d)d.style.display=(t===tab)?'block':'none';
+  });
+}
+
+function setTemplate(el,t){
+  document.querySelectorAll('.tmpl-btn').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+  currentTemplate=t;
+  renderPreview();
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2200);
+}
+
+function updateCharCount(ta,scopeId){
+  var n=document.getElementById(scopeId+'_n');
+  if(n)n.textContent=ta.value.length;
+}
+
+function addSkill(){
+  var inp=document.getElementById('skillIn');
+  var val=inp.value.trim();
+  if(val&&!skills.includes(val)){
+    skills.push(val);
+    inp.value='';
+    renderSkills();
+    updateAll();
+    showToast('Skill added: '+val);
+  }
+}
+function removeSkill(s){
+  skills=skills.filter(function(x){return x!==s;});
+  renderSkills();
+  updateAll();
+}
+function quickSkill(s){
+  if(!skills.includes(s)){skills.push(s);renderSkills();updateAll();showToast('Added: '+s);}
+}
+
+function renderSkills(){
+  var c=document.getElementById('skillTags');
+  c.innerHTML=skills.map(function(s){
+    return '<div class="skill-pill">'+s+'<span class="skill-x" onclick="removeSkill(\''+s.replace(/'/g,"\\'")+'\')">&times;</span></div>';
+  }).join('');
+  var nb=document.getElementById('nbSkill');
+  if(nb)nb.textContent=skills.length;
+  renderSuggestions();
+}
+
+var SUGGESTIONS=['Docker','Kubernetes','AWS','Azure','GCP','CI/CD','GraphQL','TypeScript','Redis','PostgreSQL','MongoDB','Kafka','Terraform','Jenkins','Linux','Bash','Node.js','Django','FastAPI','Microservices','System Design','REST','gRPC'];
+function renderSuggestions(){
+  var s=document.getElementById('skillSuggest');
+  var remaining=SUGGESTIONS.filter(function(x){return !skills.includes(x);}).slice(0,10);
+  s.innerHTML=remaining.map(function(x){
+    return '<span class="suggest-chip" onclick="quickSkill(\''+x+'\')">+ '+x+'</span>';
+  }).join('');
+}
+
+function makeBulletList(bullets,containerId){
+  var c=document.getElementById(containerId);
+  if(!c)return;
+  c.innerHTML='';
+  bullets.forEach(function(b,i){addBulletRow(c,b);});
+}
+function addBulletRow(container,val){
+  var row=document.createElement('div');
+  row.className='bullet-row';
+  var dot=document.createElement('div');dot.className='bullet-dot';
+  var inp=document.createElement('input');
+  inp.value=val||'';
+  inp.placeholder='Describe your achievement with measurable impact...';
+  inp.oninput=updateAll;
+  var rm=document.createElement('div');
+  rm.className='bullet-rm';
+  rm.innerHTML='&times;';
+  rm.onclick=function(){row.remove();updateAll();};
+  row.appendChild(dot);row.appendChild(inp);row.appendChild(rm);
+  container.appendChild(row);
+}
+function addBullet(containerId){
+  var c=document.getElementById(containerId);
+  if(c)addBulletRow(c,'');
+}
+
+function makeExpEntry(data,idx){
+  var box=document.createElement('div');box.className='entry-box';
+  var title=data.title&&data.company?data.title+' at '+data.company:'New position';
+  var bid='exp_b_'+idx+'_'+Date.now();
+  box.innerHTML='<div class="entry-hd" onclick="toggleEntry(this)"><div><div class="entry-hd-title">'+title+'</div><div class="entry-hd-sub">'+(data.start||'')+(data.end?' – '+data.end:'')+'</div></div><div class="entry-hd-right"><div class="entry-del" onclick="event.stopPropagation();this.closest(\'.entry-box\').remove();updateAll()">Remove</div><span style="font-size:10px;color:var(--color-text-tertiary)">&#9654;</span></div></div>'
+  +'<div class="entry-body open">'
+  +'<div class="field-grid"><div class="field"><label>Job title</label><input class="ef-title" value="'+(data.title||'')+'" oninput="updateEntryHeader(this);updateAll()" placeholder="Software Engineer"></div>'
+  +'<div class="field"><label>Company</label><input class="ef-company" value="'+(data.company||'')+'" oninput="updateEntryHeader(this);updateAll()" placeholder="Company name"></div>'
+  +'<div class="field"><label>Start date</label><input class="ef-start" value="'+(data.start||'')+'" oninput="updateEntryHeader(this);updateAll()" placeholder="Jan 2022"></div>'
+  +'<div class="field"><label>End date</label><input class="ef-end" value="'+(data.end||'')+'" oninput="updateEntryHeader(this);updateAll()" placeholder="Present"></div>'
+  +'<div class="field"><label>Location</label><input value="'+(data.location||'')+'" oninput="updateAll()" placeholder="City, Country"></div>'
+  +'<div class="field"><label>Employment type</label><select oninput="updateAll()"><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option><option>Freelance</option></select></div></div>'
+  +'<div style="margin-top:10px"><div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px">Achievements & responsibilities</div>'
+  +'<div class="bullet-list" id="'+bid+'"></div>'
+  +'<div class="add-bullet" onclick="addBullet(\''+bid+'\')">+ Add bullet point</div>'
+  +'<div style="margin-top:8px"><button class="btn" style="font-size:10px" onclick="sendPrompt(\'Improve this job entry bullet points for ATS: '+data.title+' at '+data.company+'. Make them start with action verbs and include measurable metrics.\')">AI improve bullets &#8599;</button></div>'
+  +'</div></div>';
+  var wrap=document.getElementById('expWrap');
+  if(wrap)wrap.appendChild(box);
+  var bl=document.getElementById(bid);
+  if(bl&&data.bullets){data.bullets.forEach(function(b){addBulletRow(bl,b);});}
+}
+
+function addExp(){
+  makeExpEntry({title:'',company:'',start:'',end:'Present',location:'',bullets:['']},Date.now());
+  updateAll();
+}
+
+function makeEduEntry(data){
+  var box=document.createElement('div');box.className='entry-box';
+  box.innerHTML='<div class="entry-hd" onclick="toggleEntry(this)"><div><div class="entry-hd-title">'+(data.degree||'New degree')+'</div><div class="entry-hd-sub">'+(data.inst||'')+(data.end?' · '+data.end:'')+'</div></div><div class="entry-hd-right"><div class="entry-del" onclick="event.stopPropagation();this.closest(\'.entry-box\').remove();updateAll()">Remove</div><span style="font-size:10px;color:var(--color-text-tertiary)">&#9654;</span></div></div>'
+  +'<div class="entry-body open">'
+  +'<div class="field-grid"><div class="field"><label>Degree / Qualification</label><input value="'+(data.degree||'')+'" oninput="updateAll()" placeholder="B.Tech Computer Science"></div>'
+  +'<div class="field"><label>Institution</label><input value="'+(data.inst||'')+'" oninput="updateAll()" placeholder="University name"></div>'
+  +'<div class="field"><label>Start year</label><input value="'+(data.start||'')+'" oninput="updateAll()" placeholder="2016"></div>'
+  +'<div class="field"><label>End year</label><input value="'+(data.end||'')+'" oninput="updateAll()" placeholder="2020"></div>'
+  +'<div class="field"><label>GPA / Score</label><input value="'+(data.gpa||'')+'" oninput="updateAll()" placeholder="8.5 / 10"></div>'
+  +'<div class="field"><label>Field of study</label><input value="" oninput="updateAll()" placeholder="Computer Science"></div></div>'
+  +'<div class="field-grid g1" style="margin-top:8px"><div class="field"><label>Relevant coursework</label><input value="'+(data.relevant||'')+'" oninput="updateAll()" placeholder="Data Structures, Algorithms, DBMS..."></div></div>'
+  +'</div>';
+  var wrap=document.getElementById('eduWrap');
+  if(wrap)wrap.appendChild(box);
+}
+function addEdu(){makeEduEntry({degree:'',inst:'',start:'',end:'',gpa:'',relevant:''});updateAll();}
+
+function makeProjEntry(data){
+  var box=document.createElement('div');box.className='entry-box';
+  var bid='proj_b_'+Date.now();
+  box.innerHTML='<div class="entry-hd" onclick="toggleEntry(this)"><div><div class="entry-hd-title">'+(data.name||'New project')+'</div><div class="entry-hd-sub">'+(data.tech||'Technologies')+'</div></div><div class="entry-hd-right"><div class="entry-del" onclick="event.stopPropagation();this.closest(\'.entry-box\').remove();updateAll()">Remove</div><span style="font-size:10px;color:var(--color-text-tertiary)">&#9654;</span></div></div>'
+  +'<div class="entry-body open">'
+  +'<div class="field-grid"><div class="field"><label>Project name</label><input value="'+(data.name||'')+'" oninput="updateAll()" placeholder="My Awesome Project"></div>'
+  +'<div class="field"><label>Technologies</label><input value="'+(data.tech||'')+'" oninput="updateAll()" placeholder="React, Node.js, MongoDB"></div>'
+  +'<div class="field"><label>Live link</label><input value="'+(data.link||'')+'" oninput="updateAll()" placeholder="github.com/..."></div>'
+  +'<div class="field"><label>Duration</label><input value="" oninput="updateAll()" placeholder="3 months"></div></div>'
+  +'<div style="margin-top:10px"><div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px">Key achievements</div>'
+  +'<div class="bullet-list" id="'+bid+'"></div>'
+  +'<div class="add-bullet" onclick="addBullet(\''+bid+'\')">+ Add bullet</div></div></div>';
+  var wrap=document.getElementById('projWrap');
+  if(wrap)wrap.appendChild(box);
+  var bl=document.getElementById(bid);
+  if(bl&&data.bullets)data.bullets.forEach(function(b){addBulletRow(bl,b);});
+}
+function addProj(){makeProjEntry({name:'',tech:'',desc:'',bullets:[''],link:''});updateAll();}
+
+function makeCertEntry(data){
+  var box=document.createElement('div');box.className='entry-box';
+  box.innerHTML='<div class="entry-hd" onclick="toggleEntry(this)"><div><div class="entry-hd-title">'+(data.name||'New certification')+'</div><div class="entry-hd-sub">'+(data.issuer||'')+'</div></div><div class="entry-hd-right"><div class="entry-del" onclick="event.stopPropagation();this.closest(\'.entry-box\').remove();updateAll()">Remove</div><span style="font-size:10px;color:var(--color-text-tertiary)">&#9654;</span></div></div>'
+  +'<div class="entry-body open">'
+  +'<div class="field-grid"><div class="field"><label>Certification name</label><input value="'+(data.name||'')+'" oninput="updateAll()" placeholder="AWS Solutions Architect"></div>'
+  +'<div class="field"><label>Issuing organization</label><input value="'+(data.issuer||'')+'" oninput="updateAll()" placeholder="Amazon Web Services"></div>'
+  +'<div class="field"><label>Issue date</label><input value="'+(data.date||'')+'" oninput="updateAll()" placeholder="2023"></div>'
+  +'<div class="field"><label>Expiry date</label><input value="'+(data.expiry||'')+'" oninput="updateAll()" placeholder="2026 or No Expiry"></div>'
+  +'<div class="field g1"><label>Credential ID</label><input value="" oninput="updateAll()" placeholder="XXXXXX-XXXXXX"></div></div></div>';
+  var wrap=document.getElementById('certWrap');
+  if(wrap)wrap.appendChild(box);
+}
+function addCert(){makeCertEntry({name:'',issuer:'',date:'',expiry:''});updateAll();}
+
+function addLang(){
+  var wrap=document.getElementById('langWrap');
+  var row=document.createElement('div');row.className='lang-row';
+  row.innerHTML='<input placeholder="Language" oninput="updateAll()" style="flex:1">'
+  +'<select oninput="updateAll()"><option>Native</option><option>Fluent</option><option>Professional</option><option>Intermediate</option><option>Basic</option></select>'
+  +'<div class="lang-del" onclick="this.parentElement.remove();updateAll()">&times;</div>';
+  wrap.appendChild(row);
+  updateAll();
+}
+
+function toggleEntry(hd){
+  var body=hd.nextElementSibling;
+  if(body){body.classList.toggle('open');}
+  var ch=hd.querySelector('span:last-child');
+  if(ch)ch.style.transform=body.classList.contains('open')?'rotate(90deg)':'';
+}
+
+function updateEntryHeader(inp){
+  var box=inp.closest('.entry-box');
+  if(!box)return;
+  var t=box.querySelector('.ef-title');
+  var c=box.querySelector('.ef-company');
+  var s=box.querySelector('.ef-start');
+  var e=box.querySelector('.ef-end');
+  var title=box.querySelector('.entry-hd-title');
+  var sub=box.querySelector('.entry-hd-sub');
+  if(title&&t&&c)title.textContent=(t.value||'Position')+(c.value?' at '+c.value:'');
+  if(sub&&s&&e)sub.textContent=(s.value||'')+(e.value?' – '+e.value:'');
+}
+
+function getExpBoxes(){
+  return Array.from(document.querySelectorAll('#expWrap .entry-box')).map(function(box){
+    var inputs=box.querySelectorAll('input');
+    var sel=box.querySelector('select');
+    var bullets=Array.from(box.querySelectorAll('.bullet-row input')).map(function(i){return i.value.trim();}).filter(Boolean);
+    return{title:inputs[0]?inputs[0].value:'',company:inputs[1]?inputs[1].value:'',start:inputs[2]?inputs[2].value:'',end:inputs[3]?inputs[3].value:'',location:inputs[4]?inputs[4].value:'',type:sel?sel.value:'',bullets:bullets};
+  });
+}
+function getEduBoxes(){
+  return Array.from(document.querySelectorAll('#eduWrap .entry-box')).map(function(box){
+    var inputs=box.querySelectorAll('input');
+    return{degree:inputs[0]?inputs[0].value:'',inst:inputs[1]?inputs[1].value:'',start:inputs[2]?inputs[2].value:'',end:inputs[3]?inputs[3].value:'',gpa:inputs[4]?inputs[4].value:'',field:inputs[5]?inputs[5].value:'',relevant:inputs[6]?inputs[6].value:''};
+  });
+}
+function getProjBoxes(){
+  return Array.from(document.querySelectorAll('#projWrap .entry-box')).map(function(box){
+    var inputs=box.querySelectorAll('input');
+    var bullets=Array.from(box.querySelectorAll('.bullet-row input')).map(function(i){return i.value.trim();}).filter(Boolean);
+    return{name:inputs[0]?inputs[0].value:'',tech:inputs[1]?inputs[1].value:'',link:inputs[2]?inputs[2].value:'',bullets:bullets};
+  });
+}
+function getCertBoxes(){
+  return Array.from(document.querySelectorAll('#certWrap .entry-box')).map(function(box){
+    var inputs=box.querySelectorAll('input');
+    return{name:inputs[0]?inputs[0].value:'',issuer:inputs[1]?inputs[1].value:'',date:inputs[2]?inputs[2].value:'',expiry:inputs[3]?inputs[3].value:''};
+  });
+}
+function getLangRows(){
+  return Array.from(document.querySelectorAll('#langWrap .lang-row')).map(function(row){
+    var inp=row.querySelector('input');
+    var sel=row.querySelector('select');
+    return{lang:inp?inp.value:'',level:sel?sel.value:''};
+  });
+}
+
+function renderPreview(){
+  var name=v('f_name')||'Your Name';
+  var title=v('f_title');
+  var email=v('f_email');
+  var phone=v('f_phone');
+  var loc=v('f_loc');
+  var linkedin=v('f_linkedin');
+  var github=v('f_github');
+  var summary=v('f_summary');
+  var exps=getExpBoxes();
+  var edus=getEduBoxes();
+  var projs=getProjBoxes();
+  var certs=getCertBoxes();
+  var langs=getLangRows();
+  var isModern=currentTemplate==='modern';
+  var isClassic=currentTemplate==='classic';
+
+  var h='';
+  if(isModern){
+    h+='<div style="border-left:3px solid var(--green);padding-left:12px;margin-bottom:14px">';
+    h+='<div class="rp-name">'+name+'</div>';
+    if(title)h+='<div class="rp-title">'+title+'</div>';
+    h+='<div class="rp-contact">';
+    if(email)h+='<span>'+email+'</span>';
+    if(phone)h+='<span>'+phone+'</span>';
+    if(loc)h+='<span>'+loc+'</span>';
+    if(linkedin)h+='<span style="color:var(--green-dark)">'+linkedin+'</span>';
+    if(github)h+='<span style="color:var(--green-dark)">'+github+'</span>';
+    h+='</div></div>';
+  } else if(isClassic){
+    h+='<div style="text-align:center;border-bottom:1px solid var(--color-border-tertiary);padding-bottom:10px;margin-bottom:12px">';
+    h+='<div class="rp-name" style="text-align:center">'+name+'</div>';
+    if(title)h+='<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:4px">'+title+'</div>';
+    h+='<div class="rp-contact" style="justify-content:center">';
+    [email,phone,loc,linkedin].filter(Boolean).forEach(function(c){h+='<span>'+c+'</span>';});
+    h+='</div></div>';
+  } else {
+    h+='<div class="rp-name">'+name+'</div>';
+    if(title)h+='<div class="rp-title">'+title+'</div>';
+    h+='<div class="rp-contact">';
+    [email,phone,loc,linkedin,github].filter(Boolean).forEach(function(c){h+='<span>'+c+'</span>';});
+    h+='</div>';
+  }
+
+  if(summary){h+='<div class="rp-summary">'+summary+'</div>';}
+
+  if(exps.length){
+    h+='<div class="rp-sec"><div class="rp-sec-title">Experience</div><div class="rp-sec-line"></div>';
+    exps.forEach(function(e){
+      h+='<div class="rp-entry"><div class="rp-entry-hd"><div class="rp-entry-title">'+(e.title||'')+'</div><div class="rp-entry-date">'+(e.start||'')+(e.end?' – '+e.end:'')+'</div></div>';
+      h+='<div class="rp-entry-co">'+(e.company||'')+(e.location?' · '+e.location:'')+'</div>';
+      (e.bullets||[]).forEach(function(b){h+='<div class="rp-bullet">'+b+'</div>';});
+      h+='</div>';
+    });
+    h+='</div>';
+  }
+
+  if(edus.length){
+    h+='<div class="rp-sec"><div class="rp-sec-title">Education</div><div class="rp-sec-line"></div>';
+    edus.forEach(function(e){
+      h+='<div class="rp-entry"><div class="rp-entry-hd"><div class="rp-entry-title">'+(e.degree||'')+'</div><div class="rp-entry-date">'+(e.start||'')+(e.end?' – '+e.end:'')+'</div></div>';
+      h+='<div class="rp-entry-co">'+(e.inst||'')+(e.gpa?' · GPA: '+e.gpa:'')+'</div>';
+      if(e.relevant)h+='<div class="rp-bullet">Relevant coursework: '+e.relevant+'</div>';
+      h+='</div>';
+    });
+    h+='</div>';
+  }
+
+  if(skills.length){
+    var skillClass=isModern?'rp-skill modern':'rp-skill';
+    h+='<div class="rp-sec"><div class="rp-sec-title">Technical skills</div><div class="rp-sec-line"></div><div class="rp-skills">';
+    skills.forEach(function(s){h+='<span class="'+skillClass+'">'+s+'</span>';});
+    h+='</div></div>';
+  }
+
+  if(projs.length){
+    h+='<div class="rp-sec"><div class="rp-sec-title">Projects</div><div class="rp-sec-line"></div>';
+    projs.forEach(function(p){
+      h+='<div class="rp-proj"><div class="rp-proj-title">'+(p.name||'')+(p.link?' <span style="font-size:9px;color:var(--green-dark)">'+p.link+'</span>':'')+'</div>';
+      if(p.tech)h+='<div class="rp-proj-tech">'+p.tech+'</div>';
+      (p.bullets||[]).forEach(function(b){h+='<div class="rp-bullet">'+b+'</div>';});
+      h+='</div>';
+    });
+    h+='</div>';
+  }
+
+  if(certs.length){
+    h+='<div class="rp-sec"><div class="rp-sec-title">Certifications</div><div class="rp-sec-line"></div>';
+    certs.forEach(function(c){
+      h+='<div class="rp-cert"><div><div style="font-size:10.5px;font-weight:500">'+(c.name||'')+'</div><div style="font-size:9.5px;color:var(--color-text-secondary)">'+(c.issuer||'')+'</div></div><div style="font-size:9.5px;color:var(--color-text-secondary)">'+(c.date||'')+(c.expiry?' – '+c.expiry:'')+'</div></div>';
+    });
+    h+='</div>';
+  }
+
+  if(langs.length){
+    h+='<div class="rp-sec"><div class="rp-sec-title">Languages</div><div class="rp-sec-line"></div>';
+    var langLevels={Native:100,Fluent:85,Professional:70,Intermediate:50,Basic:25};
+    langs.forEach(function(l){
+      if(!l.lang)return;
+      var pct=langLevels[l.level]||50;
+      h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:5px"><div style="font-size:10.5px;width:70px">'+l.lang+'</div><div style="flex:1"><div class="rp-lang-bar"><div class="rp-lang-fill" style="width:'+pct+'%"></div></div></div><div style="font-size:9.5px;color:var(--color-text-secondary);width:70px;text-align:right">'+l.level+'</div></div>';
+    });
+    h+='</div>';
+  }
+
+  var paper=document.getElementById('resumePaper');
+  if(paper)paper.innerHTML=h;
+}
+
+function calcScore(){
+  var score=20;
+  var tags=[];
+  var name=v('f_name');var email=v('f_email');var phone=v('f_phone');var summary=v('f_summary');
+  if(name)score+=5;
+  if(email)score+=5;
+  if(phone)score+=3;
+  if(summary&&summary.length>80){score+=10;tags.push({t:'Summary',c:'ok'});}
+  else if(summary){score+=4;tags.push({t:'Summary thin',c:'warn'});}
+  else{tags.push({t:'No summary',c:'bad'});}
+  var exps=document.querySelectorAll('#expWrap .entry-box').length;
+  if(exps>=2){score+=15;tags.push({t:'Experience',c:'ok'});}
+  else if(exps===1){score+=8;tags.push({t:'1 job only',c:'warn'});}
+  else{tags.push({t:'No experience',c:'bad'});}
+  var bullets=document.querySelectorAll('#expWrap .bullet-row input');
+  var bCount=0;
+  bullets.forEach(function(b){if(b.value.trim())bCount++;});
+  if(bCount>=6){score+=10;tags.push({t:'Bullets ok',c:'ok'});}
+  else if(bCount>0){score+=4;tags.push({t:'More bullets',c:'warn'});}
+  if(skills.length>=8){score+=12;tags.push({t:'Skills ok',c:'ok'});}
+  else if(skills.length>=4){score+=6;tags.push({t:'More skills',c:'warn'});}
+  else{tags.push({t:'Few skills',c:'bad'});}
+  var edus=document.querySelectorAll('#eduWrap .entry-box').length;
+  if(edus){score+=8;tags.push({t:'Education',c:'ok'});}
+  else{tags.push({t:'No education',c:'warn'});}
+  var certs=document.querySelectorAll('#certWrap .entry-box').length;
+  if(certs){score+=5;tags.push({t:'Certified',c:'ok'});}
+  var projs=document.querySelectorAll('#projWrap .entry-box').length;
+  if(projs){score+=7;tags.push({t:'Projects',c:'ok'});}
+  if(v('f_linkedin'))score+=5;
+  if(v('f_github'))score+=3;
+  score=Math.min(Math.round(score),99);
+
+  var sv=document.getElementById('scoreVal');
+  var sb=document.getElementById('scoreBar');
+  if(sv)sv.textContent=score;
+  if(sb)sb.style.width=score+'%';
+  var color=score>=80?'var(--green)':score>=60?'var(--amber)':'var(--red)';
+  if(sv)sv.style.color=color;
+  if(sb)sb.style.background=color;
+
+  var st=document.getElementById('scoreTags');
+  if(st)st.innerHTML=tags.slice(0,4).map(function(t){return '<span class="score-tag tag-'+t.c+'">'+t.t+'</span>';}).join('');
+
+  return score;
+}
+
+function updateNavBadges(){
+  var nb=document.getElementById('nbExp');if(nb)nb.textContent=document.querySelectorAll('#expWrap .entry-box').length;
+  var ne=document.getElementById('nbEdu');if(ne)ne.textContent=document.querySelectorAll('#eduWrap .entry-box').length;
+  var np=document.getElementById('nbProj');if(np)np.textContent=document.querySelectorAll('#projWrap .entry-box').length;
+  var ns=document.getElementById('nbSkill');if(ns)ns.textContent=skills.length;
+  var ec=document.getElementById('expCount');if(ec){var n=document.querySelectorAll('#expWrap .entry-box').length;ec.textContent=n+' position'+(n!==1?'s':'');}
+  var edc=document.getElementById('eduCount');if(edc){var m=document.querySelectorAll('#eduWrap .entry-box').length;edc.textContent=m+' degree'+(m!==1?'s':'');}
+  var pc=document.getElementById('projCount');if(pc){var p=document.querySelectorAll('#projWrap .entry-box').length;pc.textContent=p+' project'+(p!==1?'s':'');}
+}
+
+function updateProgressPanel(){
+  var items=document.getElementById('progressItems');
+  if(!items)return;
+  var checks=[
+    {name:'Contact info',pct:((v('f_name')?25:0)+(v('f_email')?25:0)+(v('f_phone')?25:0)+(v('f_linkedin')?25:0))},
+    {name:'Summary',pct:Math.min(100,Math.round((v('f_summary').length/300)*100))},
+    {name:'Experience',pct:Math.min(100,document.querySelectorAll('#expWrap .entry-box').length*40+(document.querySelectorAll('#expWrap .bullet-row input').length*5))},
+    {name:'Education',pct:document.querySelectorAll('#eduWrap .entry-box').length>=1?100:0},
+    {name:'Skills',pct:Math.min(100,Math.round((skills.length/12)*100))},
+    {name:'Projects',pct:Math.min(100,document.querySelectorAll('#projWrap .entry-box').length*60)},
+    {name:'Certifications',pct:Math.min(100,document.querySelectorAll('#certWrap .entry-box').length*80)}
+  ];
+  items.innerHTML=checks.map(function(c){
+    var p=Math.round(c.pct);
+    var cls=p>=80?'pf-green':p>=40?'pf-amber':'pf-red';
+    return '<div class="progress-item"><div class="progress-row"><span class="progress-name">'+c.name+'</span><span class="progress-pct">'+p+'%</span></div><div class="progress-bar"><div class="progress-fill '+cls+'" style="width:'+p+'%"></div></div></div>';
+  }).join('');
+}
+
+function updateATSPanel(){
+  var rows=document.getElementById('atsRows');
+  if(!rows)return;
+  var hasName=!!v('f_name');
+  var hasEmail=!!v('f_email');
+  var hasPhone=!!v('f_phone');
+  var hasSummary=v('f_summary').length>50;
+  var hasExp=document.querySelectorAll('#expWrap .entry-box').length>0;
+  var hasSkills=skills.length>=5;
+  var hasEdu=document.querySelectorAll('#eduWrap .entry-box').length>0;
+  var bulletCount=Array.from(document.querySelectorAll('#expWrap .bullet-row input')).filter(function(i){return i.value.trim();}).length;
+  var goodBullets=bulletCount>=4;
+  var checks=[
+    {ok:true,text:'No images or graphics',badge:'Pass'},
+    {ok:true,text:'Single-column clean layout',badge:'Pass'},
+    {ok:true,text:'Standard ATS section headings',badge:'Pass'},
+    {ok:true,text:'No tables or text boxes',badge:'Pass'},
+    {ok:hasName&&hasEmail&&hasPhone,text:'Complete contact information',badge:hasName&&hasEmail&&hasPhone?'Pass':'Fix'},
+    {ok:hasSummary,text:'Professional summary present',badge:hasSummary?'Pass':'Missing'},
+    {ok:hasExp,text:'Work experience section',badge:hasExp?'Pass':'Missing'},
+    {ok:hasSkills,text:'5+ skills listed (ATS needs keywords)',badge:hasSkills?'Pass':'Low — add more'},
+    {ok:hasEdu,text:'Education included',badge:hasEdu?'Pass':'Missing'},
+    {ok:goodBullets,text:'4+ achievement bullet points',badge:goodBullets?'Pass':'Add more'}
+  ];
+  rows.innerHTML=checks.map(function(c){
+    return '<div class="ats-row"><div class="ats-dot '+(c.ok?'dot-g':'dot-r')+'"></div><span class="ats-text">'+c.text+'</span><span class="ats-badge '+(c.ok?'ats-badge-ok':'ats-badge-bad')+'">'+c.badge+'</span></div>';
+  }).join('');
+}
+
+function analyzeJD(){
+  var jd=document.getElementById('jdInput');
+  var kwArea=document.getElementById('kwArea');
+  if(!jd||!kwArea)return;
+  var text=jd.value.toLowerCase();
+  if(!text.trim()){kwArea.style.display='none';return;}
+  kwArea.style.display='block';
+  var words=(text.match(/\b[a-z][a-z.+#]{2,}\b/g)||[]);
+  var freq={};
+  words.forEach(function(w){if(!STOP.has(w))freq[w]=(freq[w]||0)+1;});
+  var top=Object.entries(freq).sort(function(a,b){return b[1]-a[1];}).slice(0,14).map(function(e){return e[0];});
+  var resumeText=(v('f_name')+' '+v('f_title')+' '+v('f_summary')+' '+skills.join(' ')).toLowerCase();
+  var expText=Array.from(document.querySelectorAll('#expWrap .bullet-row input')).map(function(i){return i.value;}).join(' ').toLowerCase();
+  var fullText=resumeText+' '+expText;
+  var found=0;
+  var chips=top.map(function(kw){
+    var has=fullText.includes(kw)||skills.some(function(s){return s.toLowerCase().includes(kw)||kw.includes(s.toLowerCase());});
+    if(has)found++;
+    return '<span class="kw-chip '+(has?'kw-found':'kw-missing')+'">'+kw+'</span>';
+  });
+  var pct=top.length>0?Math.round((found/top.length)*100):0;
+  var sc=document.getElementById('kwScore');
+  var bar=document.getElementById('kwBar');
+  var ch=document.getElementById('kwChips');
+  if(sc)sc.textContent=pct+'% match';
+  if(sc)sc.style.color=pct>=70?'var(--green-dark)':pct>=40?'#633806':'#791F1F';
+  if(bar){bar.style.width=pct+'%';bar.style.background=pct>=70?'var(--green)':pct>=40?'var(--amber)':'var(--red)';}
+  if(ch)ch.innerHTML=chips.join('');
+}
+
+function updateTips(){
+  var tips=document.getElementById('tipsSection');
+  if(!tips)return;
+  var summary=v('f_summary');
+  var bullets=Array.from(document.querySelectorAll('#expWrap .bullet-row input')).map(function(i){return i.value;});
+  var hasMetrics=bullets.some(function(b){return /\d+%|\d+x|\$\d+|\d+ (users|developers|hours|days|weeks)/.test(b);});
+  var hasActionVerbs=bullets.some(function(b){return /^(Developed|Led|Built|Architected|Designed|Optimized|Reduced|Increased|Implemented|Created|Managed|Delivered|Launched|Improved|Automated)/i.test(b);});
+  var allTips=[
+    {ok:hasMetrics,title:'Add quantifiable metrics',text:'Include numbers like "reduced load time by 40%" or "served 10K+ users". ATS systems and recruiters love measurable impact.',type:'warn'},
+    {ok:hasActionVerbs,title:'Start bullets with action verbs',text:'Use: Developed, Architected, Led, Optimized, Launched, Implemented. Avoid starting with "I" or "Responsible for".',type:'warn'},
+    {ok:summary.length>120,title:'Expand your summary',text:'Aim for 3-4 sentences (150-250 chars). Include your title, years of experience, top skills, and biggest achievement.',type:'warn'},
+    {ok:skills.length>=10,title:'Add more technical skills',text:'ATS systems match keyword-by-keyword. The more relevant skills you list, the higher your match rate.',type:'warn'},
+    {ok:!!v('f_github'),title:'Add your GitHub profile',text:'For engineering roles, a GitHub link is expected and often checked by technical recruiters.',type:'warn'},
+    {ok:document.querySelectorAll('#certWrap .entry-box').length>0,title:'Include certifications',text:'Cloud certifications (AWS, GCP, Azure) significantly boost ATS scores for engineering roles.',type:'warn'},
+    {ok:true,title:'ATS safe formatting applied',text:'Your resume uses no tables, no images, no columns. This is the correct format for ATS systems.',type:'ok'},
+    {ok:true,title:'Tailor per job description',text:'Use the "Job description analyzer" tab to see exactly which keywords are missing for each job you apply to.',type:'ok'}
+  ];
+  tips.innerHTML=allTips.map(function(t){
+    return '<div class="tip-card '+(t.ok?'':'tip-warn')+'"><div class="tip-title">'+(t.ok?'&#10003; ':'')+t.title+'</div><div class="tip-text">'+t.text+'</div></div>';
+  }).join('');
+}
+
+function updateAll(){
+  renderPreview();
+  calcScore();
+  updateNavBadges();
+  updateProgressPanel();
+  updateATSPanel();
+  updateTips();
+  analyzeJD();
+  var sc=document.getElementById('f_summary');
+  if(sc){var n=document.getElementById('sc_n');if(n)n.textContent=sc.value.length;}
+}
+
+function init(){
+  expData.forEach(function(e,i){makeExpEntry(e,i);});
+  eduData.forEach(function(e){makeEduEntry(e);});
+  projData.forEach(function(p){makeProjEntry(p);});
+  certData.forEach(function(c){makeCertEntry(c);});
+  langData.forEach(function(l){
+    var wrap=document.getElementById('langWrap');
+    var row=document.createElement('div');row.className='lang-row';
+    var LEVELS=['Native','Fluent','Professional','Intermediate','Basic'];
+    row.innerHTML='<input value="'+l.lang+'" oninput="updateAll()" style="flex:1">'
+    +'<select oninput="updateAll()">'+LEVELS.map(function(lv){return '<option'+(lv===l.level?' selected':'')+'>'+lv+'</option>';}).join('')+'</select>'
+    +'<div class="lang-del" onclick="this.parentElement.remove();updateAll()">&times;</div>';
+    wrap.appendChild(row);
+  });
+  renderSkills();
+  updateAll();
+}
+
+init();
+</script>
