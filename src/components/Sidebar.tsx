@@ -161,7 +161,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </aside>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/90 backdrop-blur-xl border-t border-white/10 px-4 py-2 pb-safe">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-white/10 px-4 py-3 pb-safe">
         <div className="flex items-center justify-between gap-1">
           {SECTIONS.map((item) => {
             const Icon = item.icon;
@@ -171,12 +171,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className={cn(
-                  "flex flex-col items-center gap-1 flex-1 py-1 transition-all",
+                  "flex flex-col items-center gap-1.5 flex-1 py-1 transition-all",
                   isActive ? "text-primary-400" : "text-slate-500"
                 )}
               >
-                <Icon className={cn("w-5 h-5", isActive ? "stroke-[2.5px]" : "stroke-[2px]")} />
-                <span className="text-[10px] font-bold uppercase tracking-tighter">{item.label}</span>
+                <Icon className={cn("w-6 h-6", isActive ? "stroke-[2.5px]" : "stroke-[2px]")} />
+                <span className="text-[11px] font-black uppercase tracking-tighter">{item.label}</span>
               </button>
             );
           })}
@@ -184,18 +184,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </nav>
 
       {/* Mobile Top Header */}
-      <header className="lg:hidden h-16 bg-slate-950 border-b border-white/5 flex items-center justify-between px-6 sticky top-0 z-40">
+      <header className="lg:hidden h-20 bg-slate-950 border-b border-white/5 flex items-center justify-between px-6 sticky top-0 z-40">
         <div className="flex items-center gap-2">
-          <FileText className="w-5 h-5 text-primary-500" />
-          <span className="text-sm font-black text-white tracking-widest italic">SMART<span className="text-primary-500">CV</span></span>
+          <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
+            <FileText className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-lg font-black text-white tracking-widest italic leading-none">SMART<span className="text-primary-500">CV</span></span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".pdf" className="hidden" />
           <button 
             onClick={() => fileInputRef.current?.click()}
-            className="p-2 text-slate-400 hover:text-white transition-colors"
+            className="p-3 text-slate-400 hover:text-white transition-colors bg-white/5 rounded-xl border border-white/5"
           >
-            <Upload className="w-5 h-5" />
+            <Upload className="w-6 h-6" />
           </button>
           
           <PDFDownloadLink
@@ -205,8 +207,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
              {/* @ts-ignore */}
             {({ loading }) => (
-              <button disabled={loading} className="p-2 text-primary-500">
-                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
+              <button disabled={loading} className="p-3 text-primary-400 bg-primary-400/10 rounded-xl border border-primary-400/10 active:scale-95 transition-all">
+                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : <Download className="w-6 h-6" />}
               </button>
             )}
           </PDFDownloadLink>
