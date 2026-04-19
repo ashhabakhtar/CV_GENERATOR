@@ -54,11 +54,11 @@ export const CleanMinimalist: React.FC<CleanMinimalistProps> = ({ data }) => {
                 <span>{exp.location}</span>
               </div>
               <ul className="space-y-1.5">
-                {exp.description.map((bullet, i) => (
-                  bullet && (
+                {exp.description.split('\n').map((bullet, i) => (
+                  bullet.trim() && (
                     <li key={i} className="text-xs text-slate-500 leading-snug flex gap-3">
                       <span className="text-slate-200 select-none">//</span>
-                      {bullet}
+                      {bullet.trim()}
                     </li>
                   )
                 ))}

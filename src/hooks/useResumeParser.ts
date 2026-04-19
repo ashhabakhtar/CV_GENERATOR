@@ -126,7 +126,7 @@ export const useResumeParser = () => {
           startDate: dateMatch?.[0].split(/[-–—]/)[0]?.trim() || '',
           endDate: dateMatch?.[0].split(/[-–—]/)[1]?.trim() || '',
           current: /present/i.test(dateMatch?.[0] || ''),
-          description: bLines.slice(1).filter(l => l.length > 20),
+          description: bLines.slice(1).filter(l => l.length > 20).join('\n'),
         };
       }).filter(exp => exp.company !== 'Company Name');
     }

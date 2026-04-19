@@ -45,8 +45,8 @@ export const ATSMinimal: React.FC<ATSMinimalProps> = ({ data }) => {
                   <span>{exp.location}</span>
                 </div>
                 <ul className="list-disc list-inside text-sm space-y-0.5 ml-2">
-                  {exp.description.map((bullet, i) => (
-                    bullet && <li key={i}>{bullet}</li>
+                  {exp.description.split('\n').map((bullet, i) => (
+                    bullet.trim() && <li key={i}>{bullet.trim()}</li>
                   ))}
                 </ul>
               </div>

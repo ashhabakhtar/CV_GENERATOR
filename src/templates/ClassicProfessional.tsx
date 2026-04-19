@@ -58,10 +58,10 @@ export const ClassicProfessional: React.FC<ClassicProfessionalProps> = ({ data }
                   <span>{exp.location}</span>
                 </div>
                 <ul className="space-y-2 ml-4">
-                  {exp.description.map((bullet, i) => (
-                    bullet && (
+                  {exp.description.split('\n').map((bullet, i) => (
+                    bullet.trim() && (
                       <li key={i} className="text-sm list-disc pl-2 marker:text-slate-300">
-                        {bullet}
+                        {bullet.trim()}
                       </li>
                     )
                   ))}
