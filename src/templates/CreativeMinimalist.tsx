@@ -116,10 +116,10 @@ export const CreativeMinimalist: React.FC<CreativeMinimalistProps> = ({ data }) 
                   <span className="text-[10px] font-bold text-slate-400 uppercase">{exp.location}</span>
                 </div>
                 <ul className="space-y-3">
-                  {exp.description.map((bullet, i) => (
-                    bullet && (
+                  {exp.description.split('\n').map((bullet, i) => (
+                    bullet.trim() && (
                       <li key={i} className="text-xs text-slate-600 leading-snug pl-4 border-l-2 border-slate-100 group-hover:border-primary-200 transition-colors">
-                        {bullet}
+                        {bullet.trim()}
                       </li>
                     )
                   ))}

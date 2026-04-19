@@ -88,10 +88,10 @@ export const ModernPremium: React.FC<ModernPremiumProps> = ({ data }) => {
                 </div>
                 <p className="text-xs font-bold text-primary-600 mb-3 uppercase tracking-tighter">{exp.company} • {exp.location}</p>
                 <ul className="space-y-2">
-                  {exp.description.map((bullet, i) => (
-                    bullet && (
+                  {exp.description.split('\n').map((bullet, i) => (
+                    bullet.trim() && (
                       <li key={i} className="text-xs text-slate-600 leading-snug">
-                        {bullet}
+                        {bullet.trim()}
                       </li>
                     )
                   ))}

@@ -55,11 +55,11 @@ export const ProfessionalModern: React.FC<ProfessionalModernProps> = ({ data }) 
                   </div>
                   <p className="text-primary-600 font-bold text-xs mb-4">{exp.company} • {exp.location}</p>
                   <ul className="space-y-2">
-                    {exp.description.map((bullet, i) => (
-                      bullet && (
+                    {exp.description.split('\n').map((bullet, i) => (
+                      bullet.trim() && (
                         <li key={i} className="text-xs text-slate-600 leading-snug flex gap-2">
                           <span className="text-primary-500">•</span>
-                          {bullet}
+                          {bullet.trim()}
                         </li>
                       )
                     ))}
