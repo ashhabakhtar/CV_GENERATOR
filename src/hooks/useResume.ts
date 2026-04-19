@@ -96,6 +96,13 @@ export const useResume = () => {
     setState((prev) => ({ ...prev, atsSafeMode }));
   };
 
+  const batchUpdate = (newData: Partial<ResumeData>) => {
+    setState((prev) => ({
+      ...prev,
+      data: { ...prev.data, ...newData },
+    }));
+  };
+
   return {
     state,
     updatePersonalInfo,
@@ -107,5 +114,6 @@ export const useResume = () => {
     setAtsSafeMode,
     setJobDescription,
     setAnalysis,
+    batchUpdate,
   };
 };

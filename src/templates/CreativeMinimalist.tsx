@@ -49,21 +49,21 @@ export const CreativeMinimalist: React.FC<CreativeMinimalistProps> = ({ data }) 
         </section>
 
         <section>
-          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-900 mb-4 border-b-2 border-primary-500 w-fit pb-1">
-            Skills
-          </h2>
-          <div className="space-y-3">
+          <h3 className="text-slate-900 text-[10px] font-black uppercase tracking-[0.2em] mb-4 border-b-2 border-primary-500 w-fit pb-1">Expertise</h3>
+          <div className="space-y-4">
             {skills.map((skill) => (
-              <div key={skill.id} className="space-y-1">
-                <div className="flex justify-between text-[10px] font-bold uppercase text-slate-700">
+              <div key={skill.id} className="space-y-2">
+                <div className="flex justify-between items-center text-[10px] font-bold text-slate-700 uppercase">
                   <span>{skill.name}</span>
-                  <span className="text-primary-500">{skill.level}</span>
+                  <span className="text-primary-500">{skill.rating || 3}/5</span>
                 </div>
-                <div className="h-1 bg-slate-200 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-primary-500" 
-                    style={{ width: skill.level === 'Expert' ? '100%' : skill.level === 'Intermediate' ? '70%' : '40%' }}
-                  />
+                <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden flex gap-0.5">
+                  {[1, 2, 3, 4, 5].map((p) => (
+                    <div 
+                      key={p} 
+                      className={`flex-1 h-full rounded-sm transition-colors ${p <= (skill.rating || 3) ? 'bg-primary-500' : 'bg-slate-200'}`} 
+                    />
+                  ))}
                 </div>
               </div>
             ))}

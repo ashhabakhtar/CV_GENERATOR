@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { ResumeData } from '../types/resume';
 
 interface ModernPremiumProps {
@@ -32,12 +33,22 @@ export const ModernPremium: React.FC<ModernPremiumProps> = ({ data }) => {
           </section>
 
           <section>
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-primary-400 mb-4">Expertise</h2>
-            <div className="flex flex-wrap gap-2">
+            <h3 className="text-primary-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4">Skills</h3>
+            <div className="space-y-4">
               {skills.map((skill) => (
-                <span key={skill.id} className="bg-white/10 px-2 py-1 rounded text-[10px] font-medium">
-                  {skill.name}
-                </span>
+                <div key={skill.id}>
+                  <div className="flex justify-between text-[10px] font-bold text-white mb-2">
+                    <span>{skill.name}</span>
+                    <span className="text-white/40">{skill.rating || 3}/5</span>
+                  </div>
+                  <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(skill.rating || 3) * 20}%` }}
+                      className="h-full bg-gradient-to-r from-primary-400 to-indigo-400"
+                    />
+                  </div>
+                </div>
               ))}
             </div>
           </section>

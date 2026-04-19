@@ -80,10 +80,12 @@ export const ATSMinimal: React.FC<ATSMinimalProps> = ({ data }) => {
       {skills.length > 0 && (
         <section className="mb-6">
           <h2 className="text-sm font-bold uppercase border-b border-black mb-2">Skills</h2>
-          <div className="text-sm">
-            <span className="font-bold">Technical Skills: </span>
-            {skills.map((s, i) => (
-              <span key={s.id}>{s.name}{i < skills.length - 1 ? ', ' : ''}</span>
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            {skills.map((skill) => (
+              <div key={skill.id} className="text-sm">
+                <span className="font-bold">{skill.name}</span>
+                <span className="text-slate-400 ml-1">({skill.rating || 3}/5)</span>
+              </div>
             ))}
           </div>
         </section>

@@ -33,13 +33,14 @@ export interface Skill {
   id: string;
   name: string;
   level: 'Beginner' | 'Intermediate' | 'Expert';
+  rating: number; // 1-5
 }
 
 export interface Project {
   id: string;
   name: string;
   description: string;
-  link: string;
+  link?: string;
   technologies: string[];
 }
 
@@ -56,7 +57,7 @@ export interface ResumeData {
   }[];
 }
 
-export type TemplateId = 'ats-minimal' | 'modern-premium' | 'classic-professional' | 'creative-minimalist';
+export type TemplateId = 'ats-minimal' | 'modern-premium' | 'classic-professional' | 'creative-minimalist' | 'professional-modern' | 'clean-minimalist';
 
 export interface ATSAnalysis {
   score: number;
@@ -71,4 +72,6 @@ export interface ResumeState {
   atsSafeMode: boolean;
   jobDescription: string;
   analysis?: ATSAnalysis;
+  isValid: boolean;
+  errors: string[];
 }
