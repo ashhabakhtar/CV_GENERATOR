@@ -15,6 +15,8 @@ export const EducationForm: React.FC<EducationFormProps> = ({ data, update }) =>
         id: crypto.randomUUID(),
         school: '',
         degree: '',
+        field: '',
+        location: '',
         startDate: '',
         endDate: '',
         grade: '',
