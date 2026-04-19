@@ -156,8 +156,8 @@ const App: React.FC = () => {
             </span>
           </div>
           
-          <div className="flex justify-center pb-24 lg:pb-0">
-            <div className="origin-top scale-[0.45] sm:scale-[0.55] md:scale-[0.65] lg:scale-[0.5] xl:scale-[0.65] 2xl:scale-[0.8] transition-transform duration-500 shadow-[0_40px_100px_rgba(0,0,0,0.6)]">
+          <div className="flex justify-center pb-32 lg:pb-0">
+            <div className="origin-top scale-[0.65] sm:scale-[0.75] md:scale-[0.8] lg:scale-[0.5] xl:scale-[0.65] 2xl:scale-[0.8] transition-transform duration-500 shadow-[0_40px_100px_rgba(0,0,0,0.6)]">
               {renderPreview()}
             </div>
           </div>

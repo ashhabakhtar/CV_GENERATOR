@@ -9,6 +9,17 @@
   --glass-blur: blur(12px);
 }
 
+html {
+  /* Aggressive Mobile Zoom - Default 16px -> 18px on phones */
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 18px;
+  }
+}
+
 body {
   @apply bg-slate-950 text-slate-200 antialiased selection:bg-primary-500/30 selection:text-primary-200;
   background-image: 
@@ -16,7 +27,8 @@ body {
     radial-gradient(at 100% 0%, hsla(230, 100%, 15%, 0.15) 0, transparent 50%),
     radial-gradient(at 100% 100%, hsla(250, 100%, 15%, 0.15) 0, transparent 50%),
     radial-gradient(at 0% 100%, hsla(270, 100%, 15%, 0.15) 0, transparent 50%);
-  min-height: 100-vh;
+  min-height: 100vh;
+  line-height: 1.6;
 }
 
 .glass {

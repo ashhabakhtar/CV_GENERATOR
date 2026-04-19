@@ -171,12 +171,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className={cn(
-                  "flex flex-col items-center gap-1.5 flex-1 py-1 transition-all",
-                  isActive ? "text-primary-400" : "text-slate-500"
+                  "flex flex-col items-center gap-2 flex-1 py-1.5 transition-all outline-none",
+                  isActive ? "text-primary-400 scale-110" : "text-slate-500 hover:text-slate-300"
                 )}
               >
-                <Icon className={cn("w-6 h-6", isActive ? "stroke-[2.5px]" : "stroke-[2px]")} />
-                <span className="text-[11px] font-black uppercase tracking-tighter">{item.label}</span>
+                <Icon className={cn("w-7 h-7", isActive ? "stroke-[3px]" : "stroke-[2px]")} />
+                <span className={cn(
+                  "text-xs font-black uppercase tracking-tighter transition-all",
+                  isActive ? "opacity-100" : "opacity-80"
+                )}>
+                  {item.label}
+                </span>
               </button>
             );
           })}
