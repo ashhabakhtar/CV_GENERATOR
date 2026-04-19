@@ -15,6 +15,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ data, update }) 
       id: crypto.randomUUID(),
       company: '',
       position: '',
+      location: '',
       startDate: '',
       endDate: '',
       current: false,

@@ -31,7 +31,7 @@ export const useATSChecker = (resumeData: ResumeData, jobDescription: string) =>
     if (resumeData.experience.length === 0) alerts.push('No work experience listed.');
     if (resumeData.education.length === 0) alerts.push('Education section is empty.');
     
-    const bulletCounts = resumeData.experience.map(e => e.description.filter(d => d.trim()).length);
+    const bulletCounts = resumeData.experience.map(e => e.description.split('\n').filter(d => d.trim()).length);
     if (bulletCounts.some(c => c < 3)) alerts.push('Some job descriptions are too thin (aim for 3+ bullets).');
 
     // 4. Score Calculation

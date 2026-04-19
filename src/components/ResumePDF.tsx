@@ -102,11 +102,11 @@ export const ResumePDF: React.FC<{ data: ResumeData }> = ({ data }) => (
                 <Text>{exp.company}</Text>
                 <Text>{exp.location}</Text>
               </View>
-              {exp.description.map((bullet, i) => (
-                bullet && (
+              {exp.description.split('\n').map((bullet, i) => (
+                bullet.trim() && (
                   <View key={i} style={styles.bullet}>
                     <View style={styles.bulletDot} />
-                    <Text style={styles.bulletText}>{bullet}</Text>
+                    <Text style={styles.bulletText}>{bullet.trim()}</Text>
                   </View>
                 )
               ))}
