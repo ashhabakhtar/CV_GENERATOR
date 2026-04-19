@@ -16,7 +16,7 @@ export interface Experience {
   startDate: string;
   endDate: string;
   current: boolean;
-  description: string[];
+  description: string;
 }
 
 export interface Education {
@@ -27,12 +27,13 @@ export interface Education {
   location: string;
   startDate: string;
   endDate: string;
+  grade?: string;
 }
 
 export interface Skill {
   id: string;
   name: string;
-  level: 'Beginner' | 'Intermediate' | 'Expert';
+  level?: 'Beginner' | 'Intermediate' | 'Expert';
   rating: number; // 1-5
 }
 
